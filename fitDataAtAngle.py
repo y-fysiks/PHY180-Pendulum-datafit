@@ -53,10 +53,11 @@ def getPeriod(angleDeg, numOscillations, filename, tare, reverse = False):
                 elif (angleRaw[i] == angleRaw[i + 1]):
                     for j in range(i + 1, angleRaw.size):
                         if(angleRaw[i] < angleRaw[j]):
+                            i = j - 1
                             break
                         elif(angleRaw[i] > angleRaw[j]):
                             angle.append(angleRaw[j])
-                            avgTime = (timeRaw[i] + timeRaw[j])/2.0
+                            avgTime = (timeRaw[i] + timeRaw[j - 1])/2.0
                             time.append(avgTime)
                             i = j
                             k = j - 1
@@ -82,7 +83,7 @@ def getPeriod(angleDeg, numOscillations, filename, tare, reverse = False):
                                     cntMeasure = 1
                             break
         if(cntMeasure == numOscillations):
-            periodEnd = timeRaw[i]
+            periodEnd = time[-1]
             break
         if (measure):
             timeP.append(timeRaw[i])
@@ -92,6 +93,7 @@ def getPeriod(angleDeg, numOscillations, filename, tare, reverse = False):
 
     period = (periodEnd - periodStart) / numOscillations
     # print("period: " + str(period))
+    # print("angle: " + str(np.rad2deg(angleP[0])))
 
     return [angleP[0], period]
 
@@ -101,9 +103,9 @@ angleUncerts = []
 periodUncerts = []
 
 for i in range(80, 10-1, -10):
-    angle1, period1 = getPeriod(i, 12, "data31.csv", 33.692)
-    angle2, period2 = getPeriod(i, 12, "data31.csv", 33.692)
-    angle3, period3 = getPeriod(i, 12, "data31.csv", 33.692)
+    angle1, period1 = getPeriod(i, 3, "data31.csv", 33.692)
+    angle2, period2 = getPeriod(i, 3, "data32.csv", 10.14)
+    angle3, period3 = getPeriod(i, 3, "data33.csv", 9.487)
 
     maxError = max(abs(angle1 - np.deg2rad(i)), abs(angle2 - np.deg2rad(i)), abs(angle3 - np.deg2rad(i)))
     angleUncerts.append(maxError + np.deg2rad(0.15))
@@ -113,14 +115,16 @@ for i in range(80, 10-1, -10):
     period = (period1 + period2 + period3) / 3.0
     angles.append(angle)
     periods.append(period)
-    print("angle: " + str(angles[-1]) + " period: " + str(periods[-1]))
-    print("Error: +-" + str(angleUncerts[-1]))
+    print("angle: " + str(i) + " period: " + str(periods[-1]))
+    print("angle1: " + str(np.rad2deg(angle1)) + " angle2: " + str(np.rad2deg(angle2)) + " angle3: " + str(np.rad2deg(angle3)))
+    print("Error: " + str(np.rad2deg(maxError)) + "; +-" + str(np.rad2deg(angleUncerts[-1])) + " deg")
 
 
 for i in range(10, 80+1, 10):
-    angle1, period1 = getPeriod(i, 6, "data31.csv", 33.692, True)
-    angle2, period2 = getPeriod(i, 6, "data31.csv", 33.692, True)
-    angle3, period3 = getPeriod(i, 6, "data31.csv", 33.692, True)
+    angle1, period1 = getPeriod(i, 3, "data31.csv", 33.692, True)
+    angle2, period2 = getPeriod(i, 3, "data32.csv", 10.14, True)
+    angle3, period3 = getPeriod(i, 3, "data33.csv", 9.487, True)
+
 
     maxError = max(abs(angle1 - np.deg2rad(i)), abs(angle2 - np.deg2rad(i)), abs(angle3 - np.deg2rad(i)))
     angleUncerts.append(maxError + np.deg2rad(0.15))
@@ -130,8 +134,9 @@ for i in range(10, 80+1, 10):
     period = (period1 + period2 + period3) / 3.0
     angles.append(angle)
     periods.append(period)
-    print("angle: " + str(angles[-1]) + " period: " + str(periods[-1]))
-    print("Error: +-" + str(angleUncerts[-1]))
+    print("angle: " + str(i) + " period: " + str(periods[-1]))
+    print("angle1: " + str(np.rad2deg(angle1)) + " angle2: " + str(np.rad2deg(angle2)) + " angle3: " + str(np.rad2deg(angle3)))
+    print("Error: " + str(np.rad2deg(maxError)) + "; +-" + str(np.rad2deg(angleUncerts[-1])) + " deg")
 
 angles = np.array(angles)
 periods = np.array(periods)
@@ -139,7 +144,7 @@ periods = np.array(periods)
 def power_series(x, T0, B, C):
     return (T0 * (1.0 + B * x + C * (x ** 2)))
 
-fbb.plot_fit(power_series, angles, periods, xerror=angleUncerts, yerror=periodUncerts, xlabel="Angle (rad)", ylabel="Period (s)")
+fbb.plot_fit(power_series, angles, periods, xerror=angleUncerts, yerror=periodUncerts, xlabel="Angle (rad)", ylabel="Period (s)", title = "Period vs Angle of Pendulum")
 
 anglesPlot = np.array([np.deg2rad(x) for x in range(-80, 80+1, 1)])
 
