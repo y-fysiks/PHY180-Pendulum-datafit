@@ -30,7 +30,7 @@ def load_data(filename):
 def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, font_size=14,
              xlabel="Independant Variable (units)", ylabel="Dependent Variable (units)", title="Title"):    
     plt.rcParams.update({'font.size': font_size})
-    plt.rcParams['figure.figsize'] = 10, 9
+    plt.rcParams['figure.figsize'] = 14, 10
     # Change the fontsize of the graphs to make it easier to read.
     # Also change the picture size, useful for the save-to-file option.
                
@@ -57,13 +57,17 @@ def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, f
     # The gridspec_kw argument makes the top plot 2 times taller than the bottom plot.
     # You can adjust the relative heights by, say, changing [2, 1] to [3, 1].
 
-    ax1.set_ylim(min(ydata) - 0.2, max(ydata) + 0.2)
+    ax1.set_ylim(min(ydata) - 0.3, max(ydata) + 0.3)
     
-    ax1.errorbar(xdata, ydata, yerr=yerror, xerr=xerror, fmt=".", label="data", color="black", lw=1)
+    ax1.errorbar(xdata, ydata, yerr=yerror, xerr=xerror, fmt=".", label="data", color="black", markersize=1, lw=1)
     # Plot the data with error bars, fmt makes it data points not a line, label is
     # a string which will be printed in the legend, you should edit this string.
 
-    ax1.plot(xs, curve, label="best fit: T0 = %5.3f, B = %5.3f, C = %5.3f\nErrors: T0 +- %5.3f, B +- %5.3f, C +- %5.3f" % (tuple(popt) + tuple(puncert)), color="black")
+    s = "Best fit: \n"
+    for i in range(len(popt)):
+        s += str(i) + ": " + str(round(popt[i], 3)) + " +- " + str(round(puncert[i], 3)) + "\n"
+
+    ax1.plot(xs, curve, label=s, color="orange", markersize=1)
     # Plot the best fit curve on top of the data points as a line.
     # NOTE: you may want to change the value of label to something better!!
 

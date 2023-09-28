@@ -56,7 +56,7 @@ def getPeriod(angleDeg, numOscillations, filename, tare, reverse = False):
                             i = j - 1
                             break
                         elif(angleRaw[i] > angleRaw[j]):
-                            angle.append(angleRaw[j])
+                            angle.append(angleRaw[j - 1])
                             avgTime = (timeRaw[i] + timeRaw[j - 1])/2.0
                             time.append(avgTime)
                             i = j
@@ -102,7 +102,7 @@ periods = []
 angleUncerts = []
 periodUncerts = []
 
-for i in range(80, 10-1, -10):
+for i in range(23, 5-1, -2):
     angle1, period1 = getPeriod(i, 3, "data31.csv", 33.692)
     angle2, period2 = getPeriod(i, 3, "data32.csv", 10.14)
     angle3, period3 = getPeriod(i, 3, "data33.csv", 9.487)
@@ -120,7 +120,7 @@ for i in range(80, 10-1, -10):
     print("Error: " + str(np.rad2deg(maxError)) + "; +-" + str(np.rad2deg(angleUncerts[-1])) + " deg")
 
 
-for i in range(10, 80+1, 10):
+for i in range(5, 23+1, 2):
     angle1, period1 = getPeriod(i, 3, "data31.csv", 33.692, True)
     angle2, period2 = getPeriod(i, 3, "data32.csv", 10.14, True)
     angle3, period3 = getPeriod(i, 3, "data33.csv", 9.487, True)
