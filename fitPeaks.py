@@ -58,10 +58,14 @@ for i in range(0, angleRaw.size - 1):
 time = np.array(time)
 angle = np.array(angle)
 
+# # Invert angle test
+# for i in range(0, len(angle)):
+#     angle[i] = 1/angle[i]
+
 # Set time error to be all 0.05s
 time_error = np.full(shape=time.size, fill_value=0.05)
 
-angle_error = np.full(shape=time.size, fill_value=np.deg2rad(0.3))
+angle_error = np.full(shape=time.size, fill_value=np.deg2rad(0.15))
 
 def exp_func(t, i0, tau, shift):
     return i0 * np.exp(-t/tau) + shift
