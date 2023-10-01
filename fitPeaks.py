@@ -2,21 +2,20 @@ from scipy.optimize import curve_fit
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-
+import readData as rd
 import fit_black_box as fbb
 
 time_tare = 9.487
 
-data = pd.read_csv("data33.csv", delimiter = ', ')
-timeRaw = data['time'].to_numpy() - time_tare
-angleRaw = data['angle'].to_numpy()
+timeRaw, angleRaw = rd.readData(time_tare, "data33.csv", False)
+
 
 time = []
 angle = []
 prevAngle = 0
 for i in range(0, angleRaw.size - 1):
     k = i
-    if angleRaw[i] <= np.deg2rad(80) and angleRaw[i] >= np.deg2rad(2):
+    if angleRaw[i] <= np.deg2rad(80) and angleRaw[i] >= np.deg2rad(1):
 
         if (prevAngle !=angleRaw[i - 1]):
             print(str(i) + " " + str(angleRaw[i - 1]) + " " + str(prevAngle))
@@ -63,8 +62,8 @@ time_error = np.full(shape=time.size, fill_value=0.05)
 
 angle_error = np.full(shape=time.size, fill_value=np.deg2rad(0.3))
 
-def exp_func(t, i0, tau, shift):
-    return i0 * np.exp(-t/tau) + shift
+def exp_func(t, i0, tau):
+    return i0 * np.exp(-t/tau)
 
 fbb.plot_fit(exp_func, time, angle, xerror=time_error, yerror=angle_error, xlabel="Time (s)", ylabel="Angle (rad)", title="Amplitude vs Time")
 
