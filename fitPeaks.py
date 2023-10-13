@@ -5,17 +5,18 @@ import pandas as pd
 import readData as rd
 import fit_black_box as fbb
 
-time_tare = 9.487
+time_tare = 0
 
-timeRaw, angleRaw = rd.readData(time_tare, "data33.csv", False)
-
+data = pd.read_csv("data31.csv", delimiter = ', ', engine='python')
+timeRaw = data['time'].to_numpy() - time_tare
+angleRaw = data['angle'].to_numpy()
 
 time = []
 angle = []
 prevAngle = 0
 for i in range(0, angleRaw.size - 1):
     k = i
-    if angleRaw[i] <= np.deg2rad(80) and angleRaw[i] >= np.deg2rad(1):
+    if angleRaw[i] <= np.deg2rad(80) and angleRaw[i] >= np.deg2rad(20):
 
         if (prevAngle !=angleRaw[i - 1]):
             print(str(i) + " " + str(angleRaw[i - 1]) + " " + str(prevAngle))
@@ -53,9 +54,21 @@ for i in range(0, angleRaw.size - 1):
     #                     time.append(avgTime)
     #                     i = j
     #                     break
+cutoff = np.deg2rad(80)
+for i in range(len(angle) - 1, -1, -1):
+    if (angle[i] > cutoff):
+        for j in range(i, 0, -1):
+            angle = np.delete(angle, 0)
+            time = np.delete(time, 0)
+        time_tare = time[0]
 
+        break
+time_tare = time[0]
 time = np.array(time)
 angle = np.array(angle)
+
+time = time - time_tare
+
 
 # # Invert angle test
 # for i in range(0, len(angle)):
@@ -71,13 +84,13 @@ def exp_func(t, i0, tau):
 
 fbb.plot_fit(exp_func, time, angle, xerror=time_error, yerror=angle_error, xlabel="Time (s)", ylabel="Angle (rad)", title="Amplitude vs Time")
 
-# plt.plot(time, angle, 'bo', markersize = 1, label = 'data')
+# plt.errorbar(time, angle, yerr=angle_error, xerr=time_error, fmt=".", label="data", color="black", markersize=1.5, lw=1)
 
 # popt, pcov = curve_fit(exp_func, time, angle)
 
 # plt.plot(time, exp_func(time, *popt), 'r-', label = 'fit: i0=%5.3f, tau=%5.3f' % tuple(popt))
 
-# plt.xlabel('x')
-# plt.ylabel('y')
+# plt.xlabel('Time(s)')
+# plt.ylabel('Angle(rad)')
 # plt.legend()
 # plt.show()

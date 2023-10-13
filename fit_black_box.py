@@ -27,10 +27,10 @@ def load_data(filename):
     return data
 
 
-def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, font_size=14,
+def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, font_size=18,
              xlabel="Independant Variable (units)", ylabel="Dependent Variable (units)", title="Title"):    
     plt.rcParams.update({'font.size': font_size})
-    plt.rcParams['figure.figsize'] = 14, 10
+    plt.rcParams['figure.figsize'] = 12, 9
     # Change the fontsize of the graphs to make it easier to read.
     # Also change the picture size, useful for the save-to-file option.
                
@@ -59,7 +59,7 @@ def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, f
 
     ax1.set_ylim(min(ydata) - 0.3, max(ydata) + 0.3)
     
-    ax1.errorbar(xdata, ydata, yerr=yerror, xerr=xerror, fmt=".", label="data", color="black", markersize=1, lw=1)
+    ax1.errorbar(xdata, ydata, yerr=yerror, xerr=xerror, fmt=".", label="data", color="black")
     # Plot the data with error bars, fmt makes it data points not a line, label is
     # a string which will be printed in the legend, you should edit this string.
 
@@ -67,7 +67,7 @@ def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, f
     for i in range(len(popt)):
         s += str(i) + ": " + str(round(popt[i], 3)) + " +- " + str(round(puncert[i], 3)) + "\n"
 
-    ax1.plot(xs, curve, label=s, color="orange", markersize=1)
+    ax1.plot(xs, curve, label=s, color="black", markersize=1)
     # Plot the best fit curve on top of the data points as a line.
     # NOTE: you may want to change the value of label to something better!!
 

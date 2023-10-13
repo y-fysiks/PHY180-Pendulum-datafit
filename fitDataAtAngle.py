@@ -102,7 +102,7 @@ periods = []
 angleUncerts = []
 periodUncerts = []
 
-for i in range(23, 5-1, -2):
+for i in range(20, 4-1, -4):
     angle1, period1 = getPeriod(i, 3, "data31.csv", 33.692)
     angle2, period2 = getPeriod(i, 3, "data32.csv", 10.14)
     angle3, period3 = getPeriod(i, 3, "data33.csv", 9.487)
@@ -120,7 +120,7 @@ for i in range(23, 5-1, -2):
     print("Error: " + str(np.rad2deg(maxError)) + "; +-" + str(np.rad2deg(angleUncerts[-1])) + " deg")
 
 
-for i in range(5, 23+1, 2):
+for i in range(20, 4+1, -4):
     angle1, period1 = getPeriod(i, 3, "data31.csv", 33.692, True)
     angle2, period2 = getPeriod(i, 3, "data32.csv", 10.14, True)
     angle3, period3 = getPeriod(i, 3, "data33.csv", 9.487, True)
@@ -143,6 +143,15 @@ periods = np.array(periods)
 
 def power_series(x, T0, B, C):
     return (T0 * (1.0 + B * x + C * (x ** 2)))
+
+sum = 0
+for i in range(0, len(periods)):
+    sum += periods[i]
+Tavg = sum / len(periods)
+error = max(abs(periods - Tavg))
+
+print("Tavg: " + str(Tavg))
+print("Error: " + str(error))
 
 fbb.plot_fit(power_series, angles, periods, xerror=angleUncerts, yerror=periodUncerts, xlabel="Angle (rad)", ylabel="Period (s)", title = "Period vs Angle of Pendulum")
 

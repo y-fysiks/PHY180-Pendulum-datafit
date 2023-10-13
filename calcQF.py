@@ -16,34 +16,42 @@ angle = []
 prevAngle = 0
 for i in range(0, angleRaw.size - 1):
     k = i
-    if angleRaw[i] <= np.deg2rad(90) and angleRaw[i] >= np.deg2rad(1):
 
-        if (prevAngle !=angleRaw[i - 1]):
-            print(str(i) + " " + str(angleRaw[i - 1]) + " " + str(prevAngle))
-        if(angleRaw[i] >= 0):
-            if(angleRaw[i] > prevAngle):
+    if (prevAngle !=angleRaw[i - 1]):
+        print(str(i) + " " + str(angleRaw[i - 1]) + " " + str(prevAngle))
+    if(angleRaw[i] >= 0):
+        if(angleRaw[i] > prevAngle):
 
-                if (angleRaw[i] > angleRaw[i + 1]):
-                    angle.append(angleRaw[i])
-                    time.append(timeRaw[i])
-                elif (angleRaw[i] == angleRaw[i + 1]):
-                    for j in range(i + 1, angleRaw.size):
-                        if(angleRaw[i] < angleRaw[j]):
-                            break
-                        elif(angleRaw[i] > angleRaw[j]):
-                            angle.append(angleRaw[j])
-                            avgTime = (timeRaw[i] + timeRaw[j - 1])/2.0
-                            time.append(avgTime)
-                            i = j
-                            k = j - 1
-                            break
+            if (angleRaw[i] > angleRaw[i + 1]):
+                angle.append(angleRaw[i])
+                time.append(timeRaw[i])
+            elif (angleRaw[i] == angleRaw[i + 1]):
+                for j in range(i + 1, angleRaw.size):
+                    if(angleRaw[i] < angleRaw[j]):
+                        break
+                    elif(angleRaw[i] > angleRaw[j]):
+                        angle.append(angleRaw[j - 1])
+                        avgTime = (timeRaw[i] + timeRaw[j - 1])/2.0
+                        time.append(avgTime)
+                        i = j
+                        k = j - 1
+                        break
     prevAngle = angleRaw[k]
+
+cutoff = np.deg2rad(21)
+for i in range(len(angle) - 1, -1, -1):
+    if (angle[i] > cutoff):
+        for j in range(i, -1, -1):
+            angle = np.delete(angle, 0)
+            time = np.delete(time, 0)
+
+        break
 
 target = angle[0] * np.exp(-np.pi/2)
 Q = 0
 for i in range(0, len(angle)):
     if (angle[i] < target):
-        Q = i
+        Q = i - 0.5
         break
 Q = 2 * Q
 print(Q)
