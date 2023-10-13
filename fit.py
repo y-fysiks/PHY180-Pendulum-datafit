@@ -7,8 +7,8 @@ import fit_black_box as fbb
 
 time_tare = 33.692
 
-data = pd.read_csv("data31.csv", delimiter = ', ')
-time = data['time'].to_numpy() - time_tare
+data = pd.read_csv("Lab2/data2_10.csv", delimiter = ', ')
+time = data['timestamp'].to_numpy() - time_tare
 angle = data['angle'].to_numpy()
 
 i_0 = 1.6441001553786583
@@ -32,16 +32,16 @@ time_error = np.full(shape=time.size, fill_value=0.05)
 
 angle_error = np.full(shape=time.size, fill_value=np.deg2rad(0.15))
 
-fbb.plot_fit(damped_harmonic_func, time, angle, xerror=time_error, yerror=angle_error, xlabel="Time (s)", ylabel="Angle (rad)", title="Amplitude vs Time")
+# fbb.plot_fit(damped_harmonic_func, time, angle, xerror=time_error, yerror=angle_error, xlabel="Time (s)", ylabel="Angle (rad)", title="Amplitude vs Time")
 
 
-# plt.plot(time, angle, 'bo', markersize = 1, label = 'data')
+plt.plot(time, angle, 'bo', markersize = 1, label = 'data')
 
-# popt, pcov = curve_fit(damped_harmonic_func, time, angle)
+popt, pcov = curve_fit(damped_harmonic_func, time, angle)
 
 # plt.plot(time, damped_harmonic_func(time, *popt), 'r-', label = 'fit: i0: %5.3f, tau=%5.3f, T=%5.3f, p0=%5.3f' % tuple(popt))
 
-# plt.xlabel('x')
-# plt.ylabel('y')
-# plt.legend()
-# plt.show()
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.show()
