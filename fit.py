@@ -7,7 +7,7 @@ import fit_black_box as fbb
 
 time_tare = 33.692
 
-data = pd.read_csv("Lab2/data2_10.csv", delimiter = ', ')
+data = pd.read_csv("Lab2/data2_29.csv", delimiter = ', ')
 time = data['timestamp'].to_numpy() - time_tare
 angle = data['angle'].to_numpy()
 

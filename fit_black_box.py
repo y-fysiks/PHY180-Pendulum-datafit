@@ -20,6 +20,7 @@ x_data y_data x_uncertainty y_uncertainty
 import scipy.optimize as optimize
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 from pylab import loadtxt
 
 def load_data(filename):
@@ -80,8 +81,17 @@ def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, f
     ax1.set_ylabel(ylabel)
     # label the axes
 
-    #ax1.set_xscale('log')
-    #ax1.set_yscale('log')
+    # ax1.loglog()
+
+    # from matplotlib.ticker import ScalarFormatter
+    # formatter = ScalarFormatter()
+    # formatter.set_scientific(False)
+    # ax1.xaxis.set_minor_formatter(formatter)
+    # ax1.yaxis.set_minor_formatter(formatter)
+    # ax1.xaxis.set_major_formatter(formatter)
+    # ax1.yaxis.set_major_formatter(formatter)
+
+
     # uncomment out the above two lines if you want to make it log-log scale
     
     residual = ydata - my_func(xdata, *popt)

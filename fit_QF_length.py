@@ -40,7 +40,7 @@ for i in range(0, len(files)):
 
     avgP = 0
     for j in range(len(timePeaks) - 1):
-        if anglePeaks[j] < np.deg2rad(2.5):
+        if anglePeaks[j] < np.deg2rad(1):
             break
         # find period
         avgP += timePeaks[j + 1] - timePeaks[j]
@@ -79,4 +79,4 @@ for i in range(0, len(files)):
 
 fbb.plot_fit(quadratic_func, lengths, qFactors, xerror=uncertLength, yerror=uncertQF, xlabel="Length(mm)", ylabel="Q Factor", title="Q Factor Dependency on Length")
 
-fbb.plot_fit(pow, lengths, periods, xerror=uncertLength, yerror=uncertPeriod, xlabel="Length(mm)", ylabel="Period", title="Period Dependency on Length")
+fbb.plot_fit(pow, lengths, periods, xerror=uncertLength, yerror=uncertPeriod, xlabel="Length(mm)", ylabel="Period(s)", title="Period Dependency on Length")
